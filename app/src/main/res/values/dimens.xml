@@ -1,0 +1,13 @@
+<resources>
+    <dimen name="def_margin">8dp</dimen>
+    <dimen name="def_padding">16dp</dimen>
+    <dimen name="component_padding">4dp</dimen>
+    <dimen name="poster_width">150dp</dimen>
+    <dimen name="poster_height">200dp</dimen>
+    <dimen name="sz_label">24sp</dimen>
+    <dimen name="sz_content">20sp</dimen>
+    <dimen name="sz_child_label">20sp</dimen>
+    <dimen name="cd_corner_radius">10dp</dimen>
+    <dimen name="cd_elevation">4dp</dimen>
+    <dimen name="cd_max_elevation">4dp</dimen>
+</resources>

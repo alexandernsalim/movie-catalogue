@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+        <variable
+            name="season"
+            type="com.alexandernsalim.moviecatalogue.data.SeasonEntity" />
+    </data>
+
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/card_tv_show"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/cd_corner_radius"
+        app:cardElevation="@dimen/cd_elevation"
+        app:cardMaxElevation="@dimen/cd_max_elevation"
+        app:cardUseCompatPadding="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/def_padding">
+
+            <TextView
+                android:id="@+id/tv_season"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sz_child_label"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@{@string/season_format(season.season)}"
+                tools:text="@string/season" />
+
+            <TextView
+                android:id="@+id/tv_episodes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_season"
+                android:text="@{@plurals/episode(season.totalEpisodes, season.totalEpisodes)}"
+                tools:text="@string/episodes" />
+
+            <TextView
+                android:id="@+id/tv_premiered"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_episodes"
+                android:text="@{@string/premiered_format(season.season, season.premieredDate)}"
+                tools:text="@string/premiered" />
+
+            <TextView
+                android:id="@+id/tv_season_overview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_premiered"
+                android:text="@{season.overview}"
+                tools:text="@string/sample_overview" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

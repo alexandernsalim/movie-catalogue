@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Movie Catalogue</string>
+    <string name="title_activity_detail">Detail Activity</string>
+    <string name="movie">Movie</string>
+    <string name="tv_show">TV Show</string>
+    <string name="poster">Movie Poster</string>
+    <string name="title">Title</string>
+    <string name="release_date">01/31/2021</string>
+    <string name="rate">PG-13</string>
+    <string name="duration">1h 57m</string>
+    <string name="user_score">User Score</string>
+    <string name="genres">Genres</string>
+    <string name="overview">Overview</string>
+    <string name="sample_genres">Animation, Action, Adventure, Fantasy, Drama</string>
+    <string name="sample_overview">Tanjirō Kamado, joined with Inosuke Hashibira, a boy raised by boars who wears a boar\'s head, and Zenitsu Agatsuma, a scared boy who reveals his true power when he sleeps, boards the Infinity Train on a new mission with the Fire Hashira, Kyōjurō Rengoku, to defeat a demon who has been tormenting the people and killing the demon slayers who oppose it!</string>
+    <string name="seasons">Seasons</string>
+    <string name="season">Season 1</string>
+    <string name="episodes">13 Episodes</string>
+    <string name="premiered">Season 1 of tv show premiered on October 7, 2014.</string>
+
+    <string name="season_format">Season %1$d</string>
+    <string name="premiered_format">Season %1$d premiered on %2$s</string>
+</resources>
