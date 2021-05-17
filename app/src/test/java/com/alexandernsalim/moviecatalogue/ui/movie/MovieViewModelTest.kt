@@ -1,38 +1,56 @@
 package com.alexandernsalim.moviecatalogue.ui.movie
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.alexandernsalim.moviecatalogue.data.MovieEntity
+import com.alexandernsalim.moviecatalogue.data.source.MovieRepository
 import com.alexandernsalim.moviecatalogue.util.DataDummy
-import org.junit.Test
-
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
+import org.mockito.junit.MockitoJUnitRunner
 
+@RunWith(MockitoJUnitRunner::class)
 class MovieViewModelTest {
+    private val dummyMovies = DataDummy.generateDummyMovies()
+
     private lateinit var viewModel: MovieViewModel
 
-    private val dummyMovies = DataDummy.generateDummyMovies()
-    private val emptyMovies = ArrayList<MovieEntity>()
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @Mock
+    private lateinit var movieRepository: MovieRepository
+
+    @Mock
+    private lateinit var observer: Observer<List<MovieEntity>>
 
     @Before
     fun init() {
-        viewModel = mock(MovieViewModel::class.java)
+        viewModel = MovieViewModel(movieRepository)
     }
 
     @Test
     fun getMovies() {
-        `when`(viewModel.getMovies()).thenReturn(dummyMovies)
-        val movies = viewModel.getMovies()
-        assertNotNull(movies)
-        assertEquals(19, movies.size)
-    }
+        val moviesLiveData = MutableLiveData<List<MovieEntity>>()
+        moviesLiveData.value = dummyMovies
 
-    @Test
-    fun getMoviesReturnEmpty() {
-        `when`(viewModel.getMovies()).thenReturn(emptyMovies)
-        val movies = viewModel.getMovies()
+        `when`(movieRepository.listPopularMovies()).thenReturn(moviesLiveData)
+
+        val movies = viewModel.getMovies().value as List<MovieEntity>
+
+        verify(movieRepository).listPopularMovies()
         assertNotNull(movies)
-        assertEquals(0, movies.size)
+        assertEquals(2, movies.size)
+
+        viewModel.getMovies().observeForever(observer)
+        verify(observer).onChanged(dummyMovies)
     }
 }

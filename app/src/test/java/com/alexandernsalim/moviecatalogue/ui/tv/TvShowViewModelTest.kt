@@ -1,38 +1,56 @@
 package com.alexandernsalim.moviecatalogue.ui.tv
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.alexandernsalim.moviecatalogue.data.TvShowEntity
+import com.alexandernsalim.moviecatalogue.data.source.TvShowRepository
 import com.alexandernsalim.moviecatalogue.util.DataDummy
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
+import org.mockito.junit.MockitoJUnitRunner
 
+@RunWith(MockitoJUnitRunner::class)
 class TvShowViewModelTest {
+    private val dummyTvShows = DataDummy.generateDummyTvShows()
+
     private lateinit var viewModel: TvShowViewModel
 
-    private val dummyTvShows = DataDummy.generateDummyTvShows()
-    private val emptyTvShows = ArrayList<TvShowEntity>()
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @Mock
+    private lateinit var tvShowRepository: TvShowRepository
+
+    @Mock
+    private lateinit var observer: Observer<List<TvShowEntity>>
 
     @Before
     fun init() {
-        viewModel = mock(TvShowViewModel::class.java)
+        viewModel = TvShowViewModel(tvShowRepository)
     }
 
     @Test
     fun getTvShows() {
-        `when`(viewModel.getTvShows()).thenReturn(dummyTvShows)
-        val tvShows = viewModel.getTvShows()
-        assertNotNull(tvShows)
-        assertEquals(10, tvShows.size)
-    }
+        val tvShowsLiveData = MutableLiveData<List<TvShowEntity>>()
+        tvShowsLiveData.value = dummyTvShows
 
-    @Test
-    fun getTvShowsReturnEmpty() {
-        `when`(viewModel.getTvShows()).thenReturn(emptyTvShows)
-        val tvShows = viewModel.getTvShows()
+        `when`(tvShowRepository.listPopularTvShows()).thenReturn(tvShowsLiveData)
+
+        val tvShows = viewModel.getTvShows().value as List<TvShowEntity>
+
+        verify(tvShowRepository).listPopularTvShows()
         assertNotNull(tvShows)
-        assertEquals(0, tvShows.size)
+        assertEquals(2, tvShows.size)
+
+        viewModel.getTvShows().observeForever(observer)
+        verify(observer).onChanged(dummyTvShows)
     }
 }

@@ -1,11 +1,13 @@
 package com.alexandernsalim.moviecatalogue.ui.detail
 
+import com.alexandernsalim.moviecatalogue.util.TopRightCropTransformation
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.alexandernsalim.moviecatalogue.R
 import com.alexandernsalim.moviecatalogue.data.SeasonEntity
 import com.alexandernsalim.moviecatalogue.databinding.ItemSeasonBinding
+import com.bumptech.glide.Glide
 
 class SeasonAdapter : RecyclerView.Adapter<SeasonAdapter.SeasonViewHolder>() {
     private val seasons = ArrayList<SeasonEntity>()
@@ -31,6 +33,13 @@ class SeasonAdapter : RecyclerView.Adapter<SeasonAdapter.SeasonViewHolder>() {
     inner class SeasonViewHolder(private val binding: ItemSeasonBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(season: SeasonEntity) {
             binding.season = season
+            with(binding) {
+                Glide.with(itemView.context)
+                    .load(season.poster)
+                    .transform(TopRightCropTransformation(itemView.context, 1f, 0f))
+                    .error(R.drawable.ic_error)
+                    .into(ivSeasonPoster)
+            }
         }
     }
 }

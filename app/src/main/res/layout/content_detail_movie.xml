@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="movie"
             type="com.alexandernsalim.moviecatalogue.data.MovieEntity" />
@@ -14,106 +15,85 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:descendantFocusability="blocksDescendants"
-        android:padding="@dimen/def_padding">
+        android:padding="@dimen/med_padding">
 
-        <ImageView
+        <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/iv_poster"
             android:layout_width="@dimen/poster_width"
             android:layout_height="@dimen/poster_height"
             android:contentDescription="@string/poster"
-            android:src="@color/purple_700"
+            android:src="@color/teal_200"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/def_margin"
-            android:text="@{movie.title}"
-            android:textSize="@dimen/sz_label"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_poster"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/title" />
+            app:riv_corner_radius="10dp" />
+
+        <ImageView
+            android:id="@+id/iv_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/sm_margin"
+            android:contentDescription="@string/release_date_label"
+            android:src="@drawable/ic_calendar"
+            app:layout_constraintStart_toEndOf="@id/iv_poster"
+            app:layout_constraintTop_toTopOf="@id/iv_poster" />
 
         <TextView
             android:id="@+id/tv_release_date"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/xsm_margin"
             android:text="@{movie.releaseDate}"
+            android:textAlignment="center"
             android:textSize="@dimen/sz_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_calendar"
+            app:layout_constraintStart_toEndOf="@+id/iv_calendar"
+            app:layout_constraintTop_toTopOf="@+id/iv_poster"
             tools:text="@string/release_date" />
 
-        <TextView
-            android:id="@+id/tv_rate"
-            android:layout_width="0dp"
+        <ImageView
+            android:id="@+id/iv_time"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{movie.rate}"
-            android:textSize="@dimen/sz_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_release_date"
-            tools:text="@string/rate" />
-
+            android:layout_marginTop="@dimen/xsm_margin"
+            android:contentDescription="@string/duration_label"
+            android:src="@drawable/ic_time"
+            app:layout_constraintStart_toStartOf="@id/iv_calendar"
+            app:layout_constraintTop_toBottomOf="@id/iv_calendar" />
 
         <TextView
             android:id="@+id/tv_duration"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/xsm_margin"
             android:text="@{movie.duration}"
+            android:textAlignment="center"
             android:textSize="@dimen/sz_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_rate"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_time"
+            app:layout_constraintStart_toEndOf="@id/iv_time"
+            app:layout_constraintTop_toTopOf="@id/iv_time"
             tools:text="@string/duration" />
-
-        <TextView
-            android:id="@+id/tv_user_score_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/def_margin"
-            android:text="@string/user_score"
-            android:textSize="@dimen/sz_label"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_poster" />
 
         <RatingBar
             android:id="@+id/rb_user_score"
-            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/med_margin"
+            android:isIndicator="true"
             android:numStars="5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_user_score_label" />
+            android:rating="3"
+            android:stepSize="0.1"
+            app:layout_constraintBottom_toBottomOf="@id/tv_duration"
+            app:layout_constraintStart_toEndOf="@id/tv_duration"
+            app:layout_constraintTop_toTopOf="@id/tv_duration" />
 
-        <TextView
-            android:id="@+id/tv_genres_label"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_genres"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/genres"
-            android:textSize="@dimen/sz_label"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rb_user_score" />
-
-        <TextView
-            android:id="@+id/tv_genres"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@{movie.genres}"
-            android:textSize="@dimen/sz_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_genres_label"
-            tools:text="@string/sample_genres" />
+            app:layout_constraintStart_toStartOf="@id/iv_time"
+            app:layout_constraintTop_toBottomOf="@+id/iv_time" />
 
         <TextView
             android:id="@+id/tv_overview_label"
@@ -124,7 +104,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_genres" />
+            app:layout_constraintTop_toBottomOf="@id/iv_poster" />
 
         <TextView
             android:id="@+id/tv_overview"
@@ -136,6 +116,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_overview_label"
             tools:text="@string/sample_overview" />
+
+        <TextView
+            android:id="@+id/tv_cast_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/cast_label"
+            android:textSize="@dimen/sz_label"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_overview" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_cast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_cast_label" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

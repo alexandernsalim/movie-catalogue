@@ -1,9 +1,9 @@
 package com.alexandernsalim.moviecatalogue.data
 
 data class SeasonEntity (
-    var tvShowId: Int,
-    var season: Int,
-    var premieredDate: String,
+    var seasonNumber: Int,
+    var premieredDate: String? = "TBA",
     var totalEpisodes: Int,
-    var overview: String
+    var overview: String,
+    var poster: String? = "",
 )

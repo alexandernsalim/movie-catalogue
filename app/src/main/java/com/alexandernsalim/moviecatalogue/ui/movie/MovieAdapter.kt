@@ -9,7 +9,6 @@ import com.alexandernsalim.moviecatalogue.data.MovieEntity
 import com.alexandernsalim.moviecatalogue.databinding.ItemMovieBinding
 import com.alexandernsalim.moviecatalogue.ui.detail.DetailMovieActivity
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     private val movies = ArrayList<MovieEntity>()
@@ -43,7 +42,6 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                 tvTitle.text = movie.title
                 Glide.with(itemView.context)
                     .load(movie.poster)
-                    .apply(RequestOptions.placeholderOf(R.drawable.ic_loading))
                     .error(R.drawable.ic_error)
                     .into(ivMovie)
             }

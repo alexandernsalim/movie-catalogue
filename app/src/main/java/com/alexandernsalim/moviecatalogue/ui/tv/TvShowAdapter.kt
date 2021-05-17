@@ -9,7 +9,6 @@ import com.alexandernsalim.moviecatalogue.data.TvShowEntity
 import com.alexandernsalim.moviecatalogue.databinding.ItemTvShowBinding
 import com.alexandernsalim.moviecatalogue.ui.detail.DetailTvShowActivity
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 
 class TvShowAdapter : RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
     private val tvShows = ArrayList<TvShowEntity>()
@@ -21,7 +20,11 @@ class TvShowAdapter : RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TvShowViewHolder {
-        val itemTvShowBinding = ItemTvShowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val itemTvShowBinding = ItemTvShowBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return TvShowViewHolder(itemTvShowBinding)
     }
 
@@ -32,8 +35,9 @@ class TvShowAdapter : RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
 
     override fun getItemCount(): Int = tvShows.size
 
-    inner class TvShowViewHolder(private val binding: ItemTvShowBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class TvShowViewHolder(private val binding: ItemTvShowBinding) : RecyclerView.ViewHolder(
+        binding.root
+    ) {
         fun bind(tvShow: TvShowEntity) {
             with(binding) {
                 cardTvShow.setOnClickListener {
@@ -44,7 +48,6 @@ class TvShowAdapter : RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
                 tvTitle.text = tvShow.title
                 Glide.with(itemView.context)
                     .load(tvShow.poster)
-                    .apply(RequestOptions.placeholderOf(R.drawable.ic_loading))
                     .error(R.drawable.ic_error)
                     .into(ivTvShow)
             }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="cast"
+            type="com.alexandernsalim.moviecatalogue.data.CastEntity" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_cast"
+        android:layout_width="@dimen/poster_width"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/cd_corner_radius"
+        app:cardElevation="@dimen/cd_elevation"
+        app:cardMaxElevation="@dimen/cd_max_elevation"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_cast"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/poster_height"
+                android:contentDescription="@string/poster"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@color/teal_200" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/shadow"
+                app:layout_constraintBottom_toBottomOf="@id/tv_character"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_name" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:elevation="1dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingHorizontal="@dimen/component_padding"
+                android:text="@{cast.name}"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/tv_character"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Actor" />
+
+            <TextView
+                android:id="@+id/tv_character"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:elevation="1dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:padding="@dimen/component_padding"
+                android:text="@{cast.character}"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_cast"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_name"
+                tools:text="Character" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

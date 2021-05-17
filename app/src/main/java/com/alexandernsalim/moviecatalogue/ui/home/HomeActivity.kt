@@ -2,6 +2,7 @@ package com.alexandernsalim.moviecatalogue.ui.home
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.alexandernsalim.moviecatalogue.R
 import com.alexandernsalim.moviecatalogue.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
@@ -16,5 +17,9 @@ class HomeActivity : AppCompatActivity() {
         activityHomeBinding.tabs.setupWithViewPager(activityHomeBinding.viewPager)
 
         supportActionBar?.elevation = 0f
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setLogo(R.drawable.tmdb)
+        supportActionBar?.setDisplayUseLogoEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 }

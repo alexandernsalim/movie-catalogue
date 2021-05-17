@@ -1,9 +1,10 @@
 package com.alexandernsalim.moviecatalogue.ui.movie
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.alexandernsalim.moviecatalogue.data.MovieEntity
-import com.alexandernsalim.moviecatalogue.util.DataDummy
+import com.alexandernsalim.moviecatalogue.data.source.MovieRepository
 
-class MovieViewModel : ViewModel() {
-    fun getMovies(): List<MovieEntity> = DataDummy.generateDummyMovies()
+class MovieViewModel(private val movieRepository: MovieRepository): ViewModel() {
+    fun getMovies(): LiveData<List<MovieEntity>> = movieRepository.listPopularMovies()
 }

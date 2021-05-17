@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alexandernsalim.moviecatalogue.databinding.FragmentTvShowBinding
+import com.alexandernsalim.moviecatalogue.viewmodel.ViewModelFactory
 
 class TvShowFragment : Fragment() {
     private lateinit var fragmentTvShowBinding: FragmentTvShowBinding
@@ -21,11 +22,19 @@ class TvShowFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (activity != null) {
-            val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[TvShowViewModel::class.java]
-            val tvShows = viewModel.getTvShows()
+            val viewModelFactory = ViewModelFactory.getInstance()
+            val viewModel = ViewModelProvider(this, viewModelFactory)[TvShowViewModel::class.java]
 
             val adapter = TvShowAdapter()
-            adapter.setTvShows(tvShows)
+
+            fragmentTvShowBinding.pbTvShow.visibility = View.VISIBLE
+            fragmentTvShowBinding.rvTvShow.visibility = View.GONE
+            viewModel.getTvShows().observe(viewLifecycleOwner, { tvShows ->
+                fragmentTvShowBinding.pbTvShow.visibility = View.GONE
+                fragmentTvShowBinding.rvTvShow.visibility = View.VISIBLE
+                adapter.setTvShows(tvShows)
+                adapter.notifyDataSetChanged()
+            })
 
             with(fragmentTvShowBinding.rvTvShow) {
                 layoutManager = GridLayoutManager(context, 2)

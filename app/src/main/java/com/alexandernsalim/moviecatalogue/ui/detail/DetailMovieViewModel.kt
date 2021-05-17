@@ -1,25 +1,19 @@
 package com.alexandernsalim.moviecatalogue.ui.detail
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.alexandernsalim.moviecatalogue.data.CastEntity
 import com.alexandernsalim.moviecatalogue.data.MovieEntity
-import com.alexandernsalim.moviecatalogue.util.DataDummy
+import com.alexandernsalim.moviecatalogue.data.source.MovieRepository
 
-class DetailMovieViewModel : ViewModel() {
+class DetailMovieViewModel(private val movieRepository: MovieRepository) : ViewModel() {
     private var movieId: Int = 0
 
     fun setMovieId(movieId: Int) {
         this.movieId = movieId
     }
 
-    fun getMovie(): MovieEntity {
-        lateinit var movieData: MovieEntity
-        val movies = DataDummy.generateDummyMovies()
-        for (movie in movies) {
-            if (movie.id == movieId) {
-                movieData = movie
-                break
-            }
-        }
-        return movieData
-    }
+    fun getMovie(): LiveData<MovieEntity> = movieRepository.getMovieDetail(movieId)
+
+    fun getCredits(): LiveData<List<CastEntity>> = movieRepository.getMovieCredits(movieId)
 }

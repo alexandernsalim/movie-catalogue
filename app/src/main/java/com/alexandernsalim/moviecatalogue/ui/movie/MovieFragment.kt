@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alexandernsalim.moviecatalogue.databinding.FragmentMovieBinding
+import com.alexandernsalim.moviecatalogue.viewmodel.ViewModelFactory
 
 class MovieFragment : Fragment() {
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
@@ -21,11 +22,19 @@ class MovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (activity != null) {
-            val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MovieViewModel::class.java]
-            val movies = viewModel.getMovies()
+            val viewModelFactory = ViewModelFactory.getInstance()
+            val viewModel = ViewModelProvider(this, viewModelFactory)[MovieViewModel::class.java]
 
             val adapter = MovieAdapter()
-            adapter.setMovies(movies)
+
+            fragmentMovieBinding.pbMovie.visibility = View.VISIBLE
+            fragmentMovieBinding.rvMovie.visibility = View.GONE
+            viewModel.getMovies().observe(viewLifecycleOwner, {
+                fragmentMovieBinding.pbMovie.visibility = View.GONE
+                fragmentMovieBinding.rvMovie.visibility = View.VISIBLE
+                adapter.setMovies(it)
+                adapter.notifyDataSetChanged()
+            })
 
             with(fragmentMovieBinding.rvMovie) {
                 layoutManager = GridLayoutManager(context, 2)

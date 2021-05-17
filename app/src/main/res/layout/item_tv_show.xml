@@ -8,7 +8,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_tv_show"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/poster_width"
         android:layout_height="wrap_content"
         app:cardCornerRadius="@dimen/cd_corner_radius"
         app:cardElevation="@dimen/cd_elevation"
@@ -21,22 +21,26 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/black_500">
 
             <ImageView
                 android:id="@+id/iv_tv_show"
-                android:layout_width="@dimen/poster_width"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/poster_height"
-                android:layout_margin="@dimen/def_margin"
                 android:contentDescription="@string/poster"
+                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@color/teal_200" />
 
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:padding="@dimen/component_padding"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="@id/iv_tv_show"
