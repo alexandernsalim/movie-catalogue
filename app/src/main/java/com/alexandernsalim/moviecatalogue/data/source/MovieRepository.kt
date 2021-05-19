@@ -9,23 +9,17 @@ import com.alexandernsalim.moviecatalogue.data.source.remote.RemoteDataSource
 import com.alexandernsalim.moviecatalogue.data.source.remote.response.CreditsResponse
 import com.alexandernsalim.moviecatalogue.data.source.remote.response.MovieDetailResponse
 import com.alexandernsalim.moviecatalogue.data.source.remote.response.PopularMoviesResponse
+import com.alexandernsalim.moviecatalogue.retrofit.ClientConstant
 import com.alexandernsalim.moviecatalogue.util.EspressoIdlingResource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class MovieRepository private constructor(private val remoteDataSource: RemoteDataSource): MovieDataSource {
+class MovieRepository @Inject constructor(private val remoteDataSource: RemoteDataSource): MovieDataSource {
 
     companion object {
         private const val TAG = "MovieRepository"
-
-        @Volatile
-        private var instance: MovieRepository? = null
-
-        fun getInstance(remoteDataSource: RemoteDataSource): MovieRepository =
-            instance ?: synchronized(this) {
-                instance ?: MovieRepository(remoteDataSource).apply { instance = this }
-            }
     }
 
     override fun listPopularMovies(): LiveData<List<MovieEntity>> {
@@ -33,20 +27,36 @@ class MovieRepository private constructor(private val remoteDataSource: RemoteDa
 
         EspressoIdlingResource.increment()
         remoteDataSource.getPopularMovies(object : Callback<PopularMoviesResponse> {
-            override fun onResponse(call: Call<PopularMoviesResponse>, response: Response<PopularMoviesResponse>) {
+            override fun onResponse(
+                call: Call<PopularMoviesResponse>,
+                response: Response<PopularMoviesResponse>
+            ) {
                 if (response.isSuccessful) {
                     val movies = ArrayList<MovieEntity>()
 
                     response.body()?.results?.let { items ->
                         for (movie in items) {
+                            val id = movie.id
+                            val title = movie.title
+                            val overview = movie.overview
+                            val releaseDate = movie.releaseDate
+                            val duration = ""
+                            val genres = ArrayList<String>()
+                            val voteAverage = 0.0
+                            val poster = String.format(ClientConstant.IMAGE_BASE_URL_780, movie.posterPath)
+
                             movies.add(
                                 MovieEntity(
-                                id = movie.id,
-                                title = movie.title,
-                                overview = movie.overview,
-                                releaseDate = movie.releaseDate,
-                                poster = "https://image.tmdb.org/t/p/w185${movie.posterPath}"
-                            ))
+                                    id,
+                                    title,
+                                    overview,
+                                    releaseDate,
+                                    duration,
+                                    voteAverage,
+                                    genres,
+                                    poster
+                                )
+                            )
                         }
                     }
                     popularMovies.postValue(movies)
@@ -74,23 +84,30 @@ class MovieRepository private constructor(private val remoteDataSource: RemoteDa
             override fun onResponse(call: Call<MovieDetailResponse>, response: Response<MovieDetailResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.let { detail ->
-                        val hour = detail.runtime / 60
-                        val minutes = detail.runtime % 60
+                        val id = detail.id
+                        val title = detail.title
+                        val overview = detail.overview ?: "Overview is not available"
+                        val releaseDate = detail.releaseDate
+                        val hour = detail.runtime?.div(60) ?: 0
+                        val minutes = detail.runtime?.rem(60) ?: 0
                         val duration = if (hour == 0) {
                             "${minutes}m"
                         } else {
                             "${hour}h ${minutes}m"
                         }
+                        val genres = detail.genres.map { it.name }
+                        val voteAverage = detail.voteAverage.times(10)
+                        val poster = String.format(ClientConstant.IMAGE_BASE_URL_780, detail.posterPath)
 
                         movie = MovieEntity(
-                            id = detail.id,
-                            title = detail.title,
-                            overview = detail.overview,
-                            releaseDate = detail.releaseDate,
-                            duration = duration,
-                            userScore = detail.voteAverage.times(10),
-                            genres = detail.genres.map { it.name },
-                            poster = "https://image.tmdb.org/t/p/w780${detail.posterPath}"
+                            id,
+                            title,
+                            overview,
+                            releaseDate,
+                            duration,
+                            voteAverage,
+                            genres,
+                            poster
                         )
                     }
                     movieDetail.postValue(movie)
@@ -120,11 +137,15 @@ class MovieRepository private constructor(private val remoteDataSource: RemoteDa
 
                     response.body()?.let { credits ->
                         for (cast in credits.cast) {
+                            val name = cast.name
+                            val character = cast.character
+                            val profile = String.format(ClientConstant.IMAGE_BASE_URL_185, cast.profilePath)
+
                             casts.add(
                                 CastEntity(
-                                    cast.name,
-                                    cast.character,
-                                    "https://image.tmdb.org/t/p/w185${cast.profilePath}"
+                                    name,
+                                    character,
+                                    profile
                                 )
                             )
                         }

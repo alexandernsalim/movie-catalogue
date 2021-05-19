@@ -58,8 +58,7 @@ class DetailTvShowViewModelTest {
         assertEquals(dummyTvShow.duration, tvShow.duration)
         assertEquals(dummyTvShow.genres, tvShow.genres)
         assertEquals(dummyTvShow.overview, tvShow.overview)
-        assertEquals(dummyTvShow.rate, tvShow.rate)
-        assertEquals(dummyTvShow.userScore, tvShow.userScore, 0.0)
+        assertEquals(dummyTvShow.voteAverage, tvShow.voteAverage, 0.0)
         assertEquals(dummyTvShow.poster, tvShow.poster)
         assertEquals(dummyTvShow.seasons, tvShow.seasons)
 
