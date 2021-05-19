@@ -8,8 +8,9 @@ import com.alexandernsalim.moviecatalogue.R
 import com.alexandernsalim.moviecatalogue.data.SeasonEntity
 import com.alexandernsalim.moviecatalogue.databinding.ItemSeasonBinding
 import com.bumptech.glide.Glide
+import javax.inject.Inject
 
-class SeasonAdapter : RecyclerView.Adapter<SeasonAdapter.SeasonViewHolder>() {
+class SeasonAdapter @Inject constructor() : RecyclerView.Adapter<SeasonAdapter.SeasonViewHolder>() {
     private val seasons = ArrayList<SeasonEntity>()
 
     fun setSeasons(seasons: List<SeasonEntity>?) {

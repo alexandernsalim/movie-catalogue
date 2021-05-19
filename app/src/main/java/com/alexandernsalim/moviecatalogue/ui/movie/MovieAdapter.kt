@@ -9,8 +9,9 @@ import com.alexandernsalim.moviecatalogue.data.MovieEntity
 import com.alexandernsalim.moviecatalogue.databinding.ItemMovieBinding
 import com.alexandernsalim.moviecatalogue.ui.detail.DetailMovieActivity
 import com.bumptech.glide.Glide
+import javax.inject.Inject
 
-class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+class MovieAdapter @Inject constructor() : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     private val movies = ArrayList<MovieEntity>()
 
     fun setMovies(movies: List<MovieEntity>?) {

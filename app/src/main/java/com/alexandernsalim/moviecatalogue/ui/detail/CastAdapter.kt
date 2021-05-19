@@ -7,8 +7,9 @@ import com.alexandernsalim.moviecatalogue.R
 import com.alexandernsalim.moviecatalogue.data.CastEntity
 import com.alexandernsalim.moviecatalogue.databinding.ItemCastBinding
 import com.bumptech.glide.Glide
+import javax.inject.Inject
 
-class CastAdapter : RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
+class CastAdapter @Inject constructor(): RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
     private val casts = ArrayList<CastEntity>()
 
     fun setCasts(cast: List<CastEntity>?) {

@@ -10,23 +10,17 @@ import com.alexandernsalim.moviecatalogue.data.source.remote.RemoteDataSource
 import com.alexandernsalim.moviecatalogue.data.source.remote.response.CreditsResponse
 import com.alexandernsalim.moviecatalogue.data.source.remote.response.PopularTvShowResponse
 import com.alexandernsalim.moviecatalogue.data.source.remote.response.TvShowDetailResponse
+import com.alexandernsalim.moviecatalogue.retrofit.ClientConstant
 import com.alexandernsalim.moviecatalogue.util.EspressoIdlingResource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class TvShowRepository private constructor(private val remoteDataSource: RemoteDataSource): TvShowDataSource {
+class TvShowRepository @Inject constructor(private val remoteDataSource: RemoteDataSource): TvShowDataSource {
 
     companion object {
         private const val TAG = "TvShowRepository"
-
-        @Volatile
-        private var instance: TvShowRepository? = null
-
-        fun getInstance(remoteDataSource: RemoteDataSource): TvShowRepository =
-            instance ?: synchronized(this) {
-                instance ?: TvShowRepository(remoteDataSource).apply { instance = this }
-            }
     }
 
     override fun listPopularTvShows(): LiveData<List<TvShowEntity>> {
@@ -40,13 +34,27 @@ class TvShowRepository private constructor(private val remoteDataSource: RemoteD
                 if (response.isSuccessful) {
                     response.body()?.results?.let { items ->
                         for (tvShow in items) {
+                            val id = tvShow.id
+                            val title = tvShow.name
+                            val overview = tvShow.overview
+                            val firstAirDate = tvShow.firstAirDate
+                            val duration = ""
+                            val voteAverage = 0.0
+                            val genres = ArrayList<String>()
+                            val poster = String.format(ClientConstant.IMAGE_BASE_URL_185, tvShow.posterPath)
+                            val seasons = null
+
                             tvShows.add(
                                 TvShowEntity(
-                                    id = tvShow.id,
-                                    title = tvShow.name,
-                                    overview = tvShow.overview,
-                                    firstAirDate = tvShow.firstAirDate,
-                                    poster = "https://image.tmdb.org/t/p/w185${tvShow.posterPath}",
+                                    id,
+                                    title,
+                                    firstAirDate,
+                                    duration,
+                                    voteAverage,
+                                    genres,
+                                    overview,
+                                    poster,
+                                    seasons
                                 )
                             )
                         }
@@ -81,36 +89,57 @@ class TvShowRepository private constructor(private val remoteDataSource: RemoteD
                     val seasons = ArrayList<SeasonEntity>()
 
                     response.body()?.let { detail ->
-                        val hour = detail.episodeRunTime[0] / 60
-                        val minutes = detail.episodeRunTime[0] % 60
+                        val id = detail.id
+                        val title = detail.name
+                        val overview = detail.overview
+                        val firstAirDate = detail.firstAirDate
+                        val hour = if (detail.episodeRunTime.isEmpty()) {
+                            0
+                        } else {
+                            detail.episodeRunTime[0] / 60
+                        }
+                        val minutes = if (detail.episodeRunTime.isEmpty()) {
+                            0
+                        } else {
+                            detail.episodeRunTime[0] % 60
+                        }
                         val duration = if (hour == 0) {
                             "${minutes}m"
                         } else {
                             "${hour}h ${minutes}m"
                         }
+                        val voteAverage = detail.voteAverage.times(10)
+                        val genres = detail.genres.map { it.name }
+                        val poster = String.format(ClientConstant.IMAGE_BASE_URL_780, detail.posterPath)
 
                         for (season in detail.seasons) {
+                            val seasonNumber = season.seasonNumber
+                            val premieredDate = season.airDate ?: "TBA"
+                            val totalEpisodes = season.episodeCount
+                            val seasonOverview = season.overview
+                            val seasonPoster = String.format(ClientConstant.IMAGE_BASE_URL_780, season.posterPath)
+
                             seasons.add(
                                 SeasonEntity(
-                                    season.seasonNumber,
-                                    season.airDate,
-                                    season.episodeCount,
-                                    season.overview,
-                                    "https://image.tmdb.org/t/p/w780${season.posterPath}",
+                                    seasonNumber,
+                                    premieredDate,
+                                    totalEpisodes,
+                                    seasonOverview,
+                                    seasonPoster
                                 )
                             )
                         }
 
                         tvShow = TvShowEntity(
-                            id = detail.id,
-                            title = detail.name,
-                            overview = detail.overview,
-                            firstAirDate = detail.firstAirDate,
-                            duration = duration,
-                            userScore = detail.voteAverage.times(10),
-                            genres = detail.genres.map { it.name },
-                            poster = "https://image.tmdb.org/t/p/w780${detail.posterPath}",
-                            seasons = seasons
+                            id,
+                            title,
+                            firstAirDate,
+                            duration,
+                            voteAverage,
+                            genres,
+                            overview,
+                            poster,
+                            seasons
                         )
                         tvShowDetail.postValue(tvShow)
                     }
@@ -140,11 +169,15 @@ class TvShowRepository private constructor(private val remoteDataSource: RemoteD
 
                     response.body()?.let { credits ->
                         for (cast in credits.cast) {
+                            val name = cast.name
+                            val character = cast.character
+                            val profile = String.format(ClientConstant.IMAGE_BASE_URL_185, cast.profilePath)
+
                             casts.add(
                                 CastEntity(
-                                    cast.name,
-                                    cast.character,
-                                    "https://image.tmdb.org/t/p/w185${cast.profilePath}"
+                                    name,
+                                    character,
+                                    profile
                                 )
                             )
                         }

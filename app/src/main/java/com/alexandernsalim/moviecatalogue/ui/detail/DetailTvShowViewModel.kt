@@ -5,8 +5,9 @@ import androidx.lifecycle.ViewModel
 import com.alexandernsalim.moviecatalogue.data.CastEntity
 import com.alexandernsalim.moviecatalogue.data.TvShowEntity
 import com.alexandernsalim.moviecatalogue.data.source.TvShowRepository
+import javax.inject.Inject
 
-class DetailTvShowViewModel(private val tvShowRepository: TvShowRepository) : ViewModel() {
+class DetailTvShowViewModel @Inject constructor(private val tvShowRepository: TvShowRepository) : ViewModel() {
     private var tvShowId: Int = 0
 
     fun setTvShowId(tvShowId: Int) {

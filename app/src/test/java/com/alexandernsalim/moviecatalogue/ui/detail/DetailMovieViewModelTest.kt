@@ -58,9 +58,8 @@ class DetailMovieViewModelTest {
         assertEquals(dummyMovie.duration, movie.duration)
         assertEquals(dummyMovie.genres, movie.genres)
         assertEquals(dummyMovie.overview, movie.overview)
-        assertEquals(dummyMovie.rate, movie.rate)
         assertEquals(dummyMovie.releaseDate, movie.releaseDate)
-        assertEquals(dummyMovie.userScore, movie.userScore, 0.0)
+        assertEquals(dummyMovie.voteAverage, movie.voteAverage, 0.0)
         assertEquals(dummyMovie.poster, movie.poster)
 
         viewModel.getMovie().observeForever(movieObserver)

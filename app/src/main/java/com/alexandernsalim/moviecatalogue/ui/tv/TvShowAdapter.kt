@@ -9,8 +9,9 @@ import com.alexandernsalim.moviecatalogue.data.TvShowEntity
 import com.alexandernsalim.moviecatalogue.databinding.ItemTvShowBinding
 import com.alexandernsalim.moviecatalogue.ui.detail.DetailTvShowActivity
 import com.bumptech.glide.Glide
+import javax.inject.Inject
 
-class TvShowAdapter : RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
+class TvShowAdapter @Inject constructor() : RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
     private val tvShows = ArrayList<TvShowEntity>()
 
     fun setTvShows(tvShows: List<TvShowEntity>?) {

@@ -23,20 +23,36 @@ class FakeMovieRepository(private val remoteDataSource: RemoteDataSource): Movie
         val popularMovies = MutableLiveData<List<MovieEntity>>()
 
         remoteDataSource.getPopularMovies(object : Callback<PopularMoviesResponse> {
-            override fun onResponse(call: Call<PopularMoviesResponse>, response: Response<PopularMoviesResponse>) {
+            override fun onResponse(
+                call: Call<PopularMoviesResponse>,
+                response: Response<PopularMoviesResponse>
+            ) {
                 if (response.isSuccessful) {
                     val movies = ArrayList<MovieEntity>()
 
                     response.body()?.results?.let { items ->
                         for (movie in items) {
+                            val id = movie.id
+                            val title = movie.title
+                            val overview = movie.overview
+                            val releaseDate = movie.releaseDate
+                            val duration = ""
+                            val genres = ArrayList<String>()
+                            val voteAverage = 0.0
+                            val poster = "https://image.tmdb.org/t/p/w780${movie.posterPath}"
+
                             movies.add(
                                 MovieEntity(
-                                    id = movie.id,
-                                    title = movie.title,
-                                    overview = movie.overview,
-                                    releaseDate = movie.releaseDate,
-                                    poster = "https://image.tmdb.org/t/p/w185${movie.posterPath}"
-                                ))
+                                    id,
+                                    title,
+                                    overview,
+                                    releaseDate,
+                                    duration,
+                                    voteAverage,
+                                    genres,
+                                    poster
+                                )
+                            )
                         }
                     }
                     popularMovies.postValue(movies)
@@ -61,23 +77,30 @@ class FakeMovieRepository(private val remoteDataSource: RemoteDataSource): Movie
             override fun onResponse(call: Call<MovieDetailResponse>, response: Response<MovieDetailResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.let { detail ->
-                        val hour = detail.runtime / 60
-                        val minutes = detail.runtime % 60
+                        val id = detail.id
+                        val title = detail.title
+                        val overview = detail.overview ?: "Overview is not available"
+                        val releaseDate = detail.releaseDate
+                        val hour = detail.runtime?.div(60) ?: 0
+                        val minutes = detail.runtime?.rem(60) ?: 0
                         val duration = if (hour == 0) {
                             "${minutes}m"
                         } else {
                             "${hour}h ${minutes}m"
                         }
+                        val genres = detail.genres.map { it.name }
+                        val voteAverage = detail.voteAverage.times(10)
+                        val poster = "https://image.tmdb.org/t/p/w780${detail.posterPath}"
 
                         movie = MovieEntity(
-                            id = detail.id,
-                            title = detail.title,
-                            overview = detail.overview,
-                            releaseDate = detail.releaseDate,
-                            duration = duration,
-                            userScore = detail.voteAverage.times(10),
-                            genres = detail.genres.map { it.name },
-                            poster = "https://image.tmdb.org/t/p/w780${detail.posterPath}"
+                            id,
+                            title,
+                            overview,
+                            releaseDate,
+                            duration,
+                            voteAverage,
+                            genres,
+                            poster
                         )
                     }
                     movieDetail.postValue(movie)
@@ -104,11 +127,15 @@ class FakeMovieRepository(private val remoteDataSource: RemoteDataSource): Movie
 
                     response.body()?.let { credits ->
                         for (cast in credits.cast) {
+                            val name = cast.name
+                            val character = cast.character
+                            val profile = "https://image.tmdb.org/t/p/w185${cast.profilePath}"
+
                             casts.add(
                                 CastEntity(
-                                    cast.name,
-                                    cast.character,
-                                    "https://image.tmdb.org/t/p/w185${cast.profilePath}"
+                                    name,
+                                    character,
+                                    profile
                                 )
                             )
                         }
